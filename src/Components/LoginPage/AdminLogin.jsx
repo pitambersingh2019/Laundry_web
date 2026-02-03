@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api/api";
 
 export default function AdminLogin({ onLogin }) {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function AdminLogin({ onLogin }) {
       setLoading(true);
       setError("");
 
-      const res = await fetch("http://localhost:5000/api/login?isAdmin=true", {
+      const res = await fetch(`${BASE_URL}/login?isAdmin=true`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

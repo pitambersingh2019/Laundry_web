@@ -21,7 +21,7 @@ export default function SideNabBar() {
     { name: "Services", path: "/services", icon: <Package size={20} /> },
     { name: " Offers & Discounts", path: "/offers", icon: <BadgePercent  size={20} /> },
     { name: "Supplies", path: "/supplies", icon: <Boxes   size={20} /> },
-    { name: "Settings", path: "/settings", icon: <Settings size={20} /> },
+    { name: "Settings", path: "/Setting", icon: <Settings size={20} /> },
   ];
 
   return (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../api/api";
 
 export default function Supplies() {
   const [supplies, setSupplies] = useState([]);
@@ -9,7 +10,7 @@ export default function Supplies() {
   });
   const [editingId, setEditingId] = useState(null);
 
-  const API_URL = "http://localhost:5000/api/supplies";
+  const API_URL = `${BASE_URL}/supplies`;
 
   const fetchSupplies = async () => {
     const res = await fetch(API_URL);

@@ -5,6 +5,7 @@ import {
   updateOffer,
   deleteOffer,
 } from "../api/offers";
+import { Gift, GiftIcon } from "lucide-react";
 
 export default function AdminOffers() {
   const [offers, setOffers] = useState([]);
@@ -76,8 +77,8 @@ export default function AdminOffers() {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">🎁 Offers & Discounts</h2>
+    <div className="p-6 ml-24 ">
+      <h2 className="text-2xl font-semibold mb-4 flex items-center">  <GiftIcon />  Offers & Discounts</h2>
 
       {/* FORM CARD */}
       <div className="bg-white shadow rounded-lg p-4 mb-6">

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../api/api";
 
-const API = "http://localhost:5000/api";
+const API = BASE_URL;
 
 export default function Services() {
   const [services, setServices] = useState([]);

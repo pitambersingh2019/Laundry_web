@@ -8,6 +8,7 @@ import { fetchOrders } from "../../store/orders/ordersSlice";
 import { useNavigate } from "react-router-dom";
 import UpdateStatusModal from "../Modals/UpdateStatusModal";
 import { STATUS_OPTIONS } from "../Modals/StatusOptions";
+import { BASE_URL } from "../api/api";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchSupplies = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/supplies");
+        const res = await fetch(`${BASE_URL}/supplies`);
         const data = await res.json();
         setSupplies(data);
       } catch (err) {

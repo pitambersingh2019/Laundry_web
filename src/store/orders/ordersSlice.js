@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { BASE_URL } from "../../Components/api/api";
 export const fetchOrders = createAsyncThunk(
     "orders/fetchOrders",
     async (_, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem("adminToken");
 
-            const res = await fetch("http://localhost:5000/api/orders", {
+            const res = await fetch(`${BASE_URL}/orders`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -29,7 +30,7 @@ export const updateOrder = createAsyncThunk(
         const token = localStorage.getItem("adminToken");
 
         const res = await fetch(
-            `http://localhost:5000/api/orders/${orderId}`,
+            `${BASE_URL}/orders/${orderId}`,
             {
                 method: "PUT",
                 headers: {
@@ -50,7 +51,7 @@ export const deleteOrder = createAsyncThunk(
     async (orderId) => {
         const token = localStorage.getItem("adminToken");
 
-        await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+        await fetch(`${BASE_URL}/orders/${orderId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -66,7 +67,7 @@ export const updateOrderStatus = createAsyncThunk(
     const token = localStorage.getItem("adminToken");
 
     const res = await fetch(
-      `http://localhost:5000/api/orders/${orderId}/status`,
+      `${BASE_URL}/orders/${orderId}/status`,
       {
         method: "PATCH",
         headers: {

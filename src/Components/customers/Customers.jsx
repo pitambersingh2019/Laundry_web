@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CustomersTable from "./CustomersTable";
 import CustomerModal from "./CustomerModal";
-const API_BASE_URL = "http://localhost:5000";
+import { BASE_URL } from "../api/api";
 
 export default function Customers() {
   const [customers, setCustomers] = useState([]);
@@ -13,17 +13,16 @@ export default function Customers() {
   }, []);
 
   const fetchCustomers = async () => {
-    const res = await fetch(`${API_BASE_URL}/api/admin/customers`);
+    const res = await fetch(`${BASE_URL}/admin/customers`);
     const data = await res.json();
     setCustomers(data);
   };
-
   const handleRowClick = async (customer) => {
     try {
       setLoadingCustomer(true);
 
       const res = await fetch(
-        `${API_BASE_URL}/api/admin/customers/${customer._id}`
+        `${BASE_URL}/api/admin/customers/${customer._id}`
       );
 
       if (!res.ok) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Bell } from "lucide-react";
 import Dropdown from "../dropdown/Dropdown";
 import axios from "axios";
+import { BASE_URL } from "../api/api";
 
 export default function Header() {
   const [admin, setAdmin] = useState(null);
@@ -15,7 +16,7 @@ export default function Header() {
        const token = localStorage.getItem("adminToken");
 
       const res = await axios.get(
-        "http://localhost:5000/api/admin/me",
+        `${BASE_URL}/admin/me`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
