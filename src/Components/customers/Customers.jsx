@@ -22,7 +22,7 @@ export default function Customers() {
       setLoadingCustomer(true);
 
       const res = await fetch(
-        `${BASE_URL}/api/admin/customers/${customer._id}`
+        `${BASE_URL}/admin/customers/${customer._id}`
       );
 
       if (!res.ok) {

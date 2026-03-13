@@ -13,6 +13,7 @@ import UpdateStatusModal from "../Modals/UpdateStatusModal";
 import DeleteConfirmModal from "../Modals/DeleteConfirmModal";
 import { deleteOrder } from "../../store/orders/ordersSlice";
 import { STATUS_OPTIONS } from "../Modals/StatusOptions";
+import { BASE_URL } from "../api/api";
 
 export default function Orders() {
   const dispatch = useDispatch();
@@ -51,7 +52,13 @@ export default function Orders() {
     const found = STATUS_OPTIONS.find((s) => s.label === status);
     return found ? found.color : "bg-gray-100 text-gray-600";
   };
-  return ( 
+
+  const downloadInvoice = (id) => {
+    const url = `${BASE_URL}/orders/invoice/${id}/pdf`;
+    window.open(url, "_blank");
+  };
+
+  return (
     <div className=" ml-24 p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-semibold">Order Management</h1>
@@ -156,7 +163,7 @@ export default function Orders() {
 
                     {openMenuId === order._id && (
                       <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
-                        <button className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100">
+                        <button className="flex items-center gap-2 w-full px-3 py-2 hover:bg-gray-100" onClick={() => downloadInvoice(order._id)}>
                           <Download size={14} /> Invoice
                         </button>
 

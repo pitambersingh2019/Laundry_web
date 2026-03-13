@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import Header from "../header/Header";
 import Card from "./Card";
-import { Clock, ShoppingBag, TriangleAlert, X } from "lucide-react";
-import SmallCard from "./SmallCard";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../../store/orders/ordersSlice";
-import { useNavigate } from "react-router-dom";
 import UpdateStatusModal from "../Modals/UpdateStatusModal";
-import { STATUS_OPTIONS } from "../Modals/StatusOptions";
 import { BASE_URL } from "../api/api";
+import StatsCard from "./StatsCard";
+import SalesIcon from "../../assets/sales.svg?react";
+import BoxIcon from "../../assets/box.svg?react";
+import CheckIcon from "../../assets/check.svg?react";
+import WarningIcon from "../../assets/warning.svg?react";
+import ArrowUpIcon from "../../assets/arrow.svg?react";
+import AverageRevenueChart from "../chart/AverageRevenueChart";
+import CustomerDonutChart from "../chart/CustomerDonutChart";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state.orders);
   const [statusOrder, setStatusOrder] = useState(null);
   const [supplies, setSupplies] = useState([]);
-  const navigate = useNavigate();
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -35,145 +39,155 @@ export default function Dashboard() {
     fetchSupplies();
   }, []);
 
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      debugger
+      try {
+        const res = await fetch(`${BASE_URL}/admin/customers`);
+        const data = await res.json();
+        setCustomers(data);
+      } catch (err) {
+        console.error("Error fetching customers", err);
+      }
+    };
+    fetchCustomers();
+  }, []);
+
   const completedOrders = orders.filter(o => o.status === "Delivered");
   const pendingOrders = orders.filter(o => o.status === "Pickup Requested");
-  const progressOrders = orders.filter(o => o.status === "Cleaning In Progress");
-  const cancelOrders = orders.filter(o => o.status === "Cancelled");
 
-  const getStatusColor = (status) => {
-    const found = STATUS_OPTIONS.find((s) => s.label === status);
-    return found ? found.color : "bg-gray-100 text-gray-600";
-  };
   const balance = completedOrders.reduce(
     (sum, o) => sum + o.grandTotal,
     0
   );
 
-  const unpaidTotal = orders
-    .filter(o => o.status !== "Delivered")
-    .reduce((sum, o) => sum + o.grandTotal, 0);
+  const getMonthlyChartSeries = () => {
+    debugger
+    const completedCount = Array(12).fill(0);
+    const orderCount = Array(12).fill(0);
+    const returnCount = Array(12).fill(0);
 
-  const formatDate = (date) =>
-    new Date(date)
-      .toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
-      .toLowerCase();
+    if (!Array.isArray(orders)) return [];
+
+    orders.forEach((order) => {
+      if (!order.createdAt) return;
+
+      const month = new Date(order.createdAt).getMonth();
+
+      orderCount[month] += 1;
+      const serviceCost = order.services.reduce(
+        (sum, s) => sum + (s.totalPrice || 0),
+        0
+      );
+
+      const profit = (order.grandTotal || 0) - serviceCost;
+      if (order.status === "Delivered") {
+       profit
+      }
+
+      if (order.status === "Cancelled") {
+        returnCount[month] += 1;
+      }
+    });
+
+    return [
+      { name: "Net Profit", data: completedCount },
+      { name: "Total Orders", data: orderCount },
+      { name: "Cancelled Orders", data: returnCount },
+    ];
+  };
+
+  const chartSeries = getMonthlyChartSeries();
+
+  const getCustomerDonutData = (customers) => {
+    if (!Array.isArray(customers) || customers.length === 0) {
+      return { series: [], labels: [] };
+    }
+
+    let newCustomers = 0;
+    let returningCustomers = 0;
+
+    customers.forEach((customer) => {
+      if (customer.totalOrders === 1) {
+        newCustomers++;
+      } else if (customer.totalOrders > 1) {
+        returningCustomers++;
+      }
+    });
+
+    return {
+      series: [newCustomers, returningCustomers],
+      labels: ["New Customers", "Returning Customers"],
+    };
+  };
+  const customerDonut = getCustomerDonutData(customers);
   return (
     <div className="ml-24 bg-[#f3fffe70] min-h-screen">
       <div className="border-b ">
         <Header />
       </div>
-      <div className="pl-8  pr-8 grid grid-cols-11 gap-6 pt-6">
+      <div className="pl-8  pr-8 grid grid-cols-11 gap-6 pt-8 pb-8">
         <div className="col-span-8">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl mb-4 font-semibold text-[#1C3F6E]">Orders</h2>
-            {orders.length > 4 && (
-              <div className="text-[#1C3F6E] cursor-pointer" onClick={() => navigate("/orders")}>
-                View All
-              </div>
-            )}
-          </div>
           {loading ? (
             <p>Loading orders...</p>
           ) : (
-            <div className="grid grid-cols-4 gap-4">
-              {orders.slice(0, 4).map((order) => {
-                const firstService = order.services?.[0];
+            <div className="grid p-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6 bg-white rounded-md">
 
-                return (
-                  <Card
-                    key={order._id}
-                    className="h-[170px] flex flex-col justify-between"
-                  >
+              <StatsCard
+                title="Total Sales"
+                value={`₹${balance.toLocaleString()}`}
+                icon={<SalesIcon className="w-3.5 h-3.5 text-white" />}
+                bg="bg-purple-200/60"
+                ringBg="bg-purple-300 ring-purple-200"
+                borderColor="border-purple-600"
+                iconBg="bg-purple-600"
+                arrow={<ArrowUpIcon className="w-8 h-8 text-[#846cf9]" />}
+              />
 
-                    <div className="flex justify-between items-center">
-                      <p className="text-[11px] text-gray-400">
-                        #{order._id.slice(-5)}
-                      </p>
+              <StatsCard
+                title="Today Orders"
+                value={
+                  orders.filter(
+                    o =>
+                      new Date(o.createdAt).toDateString() ===
+                      new Date().toDateString()
+                  ).length
+                }
+                icon={<BoxIcon className="w-3.5 h-3.5" />}
+                bg="bg-orange-100/60"
+                ringBg="bg-orange-200 ring-orange-100"
+                borderColor="border-orange-500"
+                iconBg="bg-orange-500"
+                arrow={<ArrowUpIcon className="w-8 h-8 text-[#f97316]" />}
+              />
 
-                      <span
-                        onClick={() => setStatusOrder(order)}
-                        className={`text-[10px] px-2 py-[2px] rounded-full font-medium cursor-pointer 
-    ${getStatusColor(order.status)}
-  `}
-                      >
-                        {order.status}
-                      </span>
+              <StatsCard
+                title="Completed Orders"
+                value={completedOrders.length}
+                icon={<CheckIcon className="w-3.5 h-3.5 text-white" />}
+                bg="bg-green-100/40"
+                ringBg="bg-green-200 ring-green-100"
+                borderColor="border-green-600"
+                iconBg="bg-green-600"
+                arrow={<ArrowUpIcon className="w-8 h-8 text-[#22c55e]" />}
+              />
 
+              <StatsCard
+                title="Pending Orders"
+                value={pendingOrders.length}
+                icon={<WarningIcon className="w-3.5 h-3.5 text-white" />}
+                bg="bg-red-100/60"
+                ringBg="bg-red-200 ring-red-100"
+                borderColor="border-red-600"
+                iconBg="bg-red-600"
+                trendColor="text-red-600"
+                arrow={<ArrowUpIcon className="w-8 h-8 text-[#ef4444]" />}
+              />
 
-                    </div>
-                    <p className="text-xs text-gray-400 mt-2">
-                      {order.createdAt && formatDate(order.createdAt)}
-                    </p>
-
-                    <h3 className="font-semibold text-sm text-gray-900">
-                      {order.userName}
-                    </h3>
-
-                    <p className="text-sm text-gray-500 leading-tight">
-                      Ironing Items :{firstService?.itemName || "No Item"}
-                    </p>
-
-                    <p className="text-sm font-semibold text-gray-900 mt-1">
-                      ₹{order.grandTotal}
-                    </p>
-                  </Card>
-                );
-              })}
             </div>
           )}
-          <div className="pt-6 grid grid-cols-2 gap-4">
-
-            <div>
-              <Card className="!bg-[#1E3A5F] text-white">
-                <div className="flex justify-between items-center mb-3">
-                  <p className="text-sm opacity-80">Balance</p>
-                  <span className="text-xs bg-white/20 px-2 py-1 rounded">
-                    Last 7 Days
-                  </span>
-                </div>
-
-                <h2 className="text-2xl font-bold">  ₹{balance.toLocaleString()}</h2>
-              </Card>
-              <div className="pt-6">
-                <Card>
-                  <div className="flex justify-between items-center mb-3">
-                    <p className="text-sm text-gray-500">Unpaid Orders</p>
-                    <span className="text-xs text-gray-400">Last 7 Days</span>
-                  </div>
-
-                  <h2 className="text-2xl font-bold text-gray-800">₹{unpaidTotal.toLocaleString()}</h2>
-                </Card>
-              </div>
-            </div>
-            <div className="bg-white rounded-lg mb-4">
-              <SmallCard
-                label="Pending Orders"
-                count={pendingOrders.length}
-                icon={<TriangleAlert color="goldenrod" />}
-              />
-
-              <SmallCard
-                label="On Progress Orders"
-                count={progressOrders.length}
-                icon={<Clock color="orangered" />}
-              />
-
-              <SmallCard
-                label="Finished Orders"
-                count={completedOrders.length}
-                icon={<ShoppingBag color="forestgreen" />}
-              />
-              <SmallCard
-                label="Cancle Orders"
-                count={cancelOrders.length}
-                icon={<X color="red" />}
-              />
-
-            </div>
+          <div >
+            <AverageRevenueChart series={chartSeries} />
           </div>
         </div>
 
@@ -199,12 +213,16 @@ export default function Dashboard() {
                       className={`h-2 rounded ${isLow ? "bg-red-500" : "bg-orange-400"
                         }`}
                       style={{ width: `${percentage}%` }}
-                    ></div>
+                    />
                   </div>
                 </div>
               );
             })}
           </Card>
+          <CustomerDonutChart
+            series={customerDonut.series}
+            labels={customerDonut.labels}
+          />
         </div>
 
       </div>

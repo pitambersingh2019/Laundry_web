@@ -11,6 +11,7 @@ import AdminOffers from "./Components/offers/AdminOffers";
 import Supplies from "./Components/Supplies/Supplies";
 import Services from "./Components/Services/Services";
 import { Setting } from "./Components/setting/Setting";
+import { Drivers } from "./Components/drivers/Drivers";
 
 function App() {
   const [admin, setAdmin] = useState(null);
@@ -40,6 +41,7 @@ function App() {
               <Route path="/offers" element={<AdminOffers />} />
               <Route path="/supplies" element={<Supplies />} />
               <Route path="/services" element={<Services/>}/>
+              <Route path="/drivers" element={<Drivers/>}/>
               <Route path="/Setting" element={<Setting/>}/>
               <Route path="*" element={<Navigate to={location.pathname} />} />
               

@@ -1,8 +1,8 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateOrder } from "../../store/orders/ordersSlice";
-import { deleteOrder } from "../../store/orders/ordersSlice"
+import { updateOrderStatus } from "../../store/orders/ordersSlice";
+
 
 export default function EditOrderModal({ order, onClose }) {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export default function EditOrderModal({ order, onClose }) {
 
 const handleSave = () => {
   dispatch(
-    updateOrder({
+    updateOrderStatus({
       orderId: order._id,
       updates: {
         status,

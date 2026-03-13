@@ -5,7 +5,8 @@ import {
   Package,
   Settings,
   BadgePercent, 
-  Boxes 
+  Boxes, 
+  Van
 } from "lucide-react";
 import logo from "../../assets/LP_logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -21,6 +22,7 @@ export default function SideNabBar() {
     { name: "Services", path: "/services", icon: <Package size={20} /> },
     { name: " Offers & Discounts", path: "/offers", icon: <BadgePercent  size={20} /> },
     { name: "Supplies", path: "/supplies", icon: <Boxes   size={20} /> },
+     { name: "Drivers", path: "/drivers", icon: <Van size={20} /> },
     { name: "Settings", path: "/Setting", icon: <Settings size={20} /> },
   ];
 
