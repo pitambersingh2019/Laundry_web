@@ -27,24 +27,22 @@ export const fetchDrivers = createAsyncThunk(
 
 export const updateDriver = createAsyncThunk(
   "drivers/updateDriver",
-  async ({ driverId, updates }, { rejectWithValue }) => {
+  async ({ id, name, email, phone, password }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("adminToken");
 
-      const res = await fetch(
-        `${BASE_URL}/drivers/${driverId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updates),
-        }
-      );
+      const res = await fetch(`${BASE_URL}/drivers/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, phone, password }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update driver");
 
       const data = await res.json();
-      return data;
+
+      return data.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }

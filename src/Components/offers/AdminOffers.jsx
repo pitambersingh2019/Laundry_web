@@ -80,7 +80,6 @@ export default function AdminOffers() {
     <div className="p-6 ml-24 ">
       <h2 className="text-2xl font-semibold mb-4 flex items-center">  <GiftIcon />  Offers & Discounts</h2>
 
-      {/* FORM CARD */}
       <div className="bg-white shadow rounded-lg p-4 mb-6">
         <form
           onSubmit={handleSubmit}

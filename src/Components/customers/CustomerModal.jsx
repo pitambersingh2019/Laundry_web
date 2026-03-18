@@ -4,7 +4,6 @@ export default function CustomerModal({ customer, onClose }) {
       
       <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-lg shadow-lg relative flex flex-col">
 
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-black text-lg"
@@ -12,12 +11,10 @@ export default function CustomerModal({ customer, onClose }) {
           ✕
         </button>
 
-        {/* Header */}
         <div className="p-6 border-b">
           <h2 className="text-xl font-semibold">Customer Details</h2>
         </div>
 
-        {/* Scrollable Content */}
         <div className="p-6 overflow-y-auto">
 
           <div className="space-y-2 text-sm">
