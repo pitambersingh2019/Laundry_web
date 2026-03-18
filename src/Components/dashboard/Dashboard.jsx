@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      debugger
+
       try {
         const res = await fetch(`${BASE_URL}/admin/customers`);
         const data = await res.json();
@@ -64,7 +64,7 @@ export default function Dashboard() {
     const profitData = Array(12).fill(0);
     const orderCount = Array(12).fill(0);
     const returnCount = Array(12).fill(0);
-    debugger
+
     if (!Array.isArray(orders)) return [];
 
     orders.forEach((order) => {

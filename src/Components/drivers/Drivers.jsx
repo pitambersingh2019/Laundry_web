@@ -22,7 +22,7 @@ export const Drivers = () => {
 
 const handleApproveToggle = async (driver) => {
     if (updatingDriverId === driver._id) return; 
-debugger
+
     setUpdatingDriverId(driver._id);
 
     try {

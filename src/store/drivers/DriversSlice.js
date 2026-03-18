@@ -74,7 +74,7 @@ export const updateApproveDriverStatus = createAsyncThunk(
   "drivers/updateApproveDriverStatus",
   async ({ driverId, isApproved }, { rejectWithValue }) => {
     try {
-      debugger
+
       const token = localStorage.getItem("adminToken");
 
       const res = await fetch(

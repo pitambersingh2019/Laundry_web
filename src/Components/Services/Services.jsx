@@ -89,7 +89,7 @@ const loadService = (slug) => {
 
     loadService(selectedService.slug);
   };
-debugger
+
   return (
     <div className="ml-24 p-6 grid grid-cols-4 gap-4">
       <div className="bg-white shadow rounded p-4">
