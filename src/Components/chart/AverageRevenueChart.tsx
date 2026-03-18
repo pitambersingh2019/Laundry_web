@@ -5,17 +5,17 @@ const AverageRevenueChart = ({ series }: any) => {
   const options: ApexOptions = {
     chart: {
       type: "bar",
-      stacked: false,
-      toolbar: { show: false },
+      stacked: true,
+      toolbar: { show: true },
     },
     plotOptions: {
       bar: {
-        columnWidth: "45%",
-        borderRadius: 6,
+        columnWidth: "20%",
+        borderRadius: 4,
       },
     },
     
-    colors: ["#6c5899", "#d40617", "#e06914"],
+    colors: ["#6d5797", "#af0639", "#1402b6"],
     dataLabels: { enabled: false },
     grid: {
       borderColor: "#E2E8F0",
@@ -29,7 +29,7 @@ const AverageRevenueChart = ({ series }: any) => {
       ],
     },
     yaxis: {
-      tickAmount: 6,
+      tickAmount: 10,
       forceNiceScale: true,
       labels: {
         formatter: (val: number) => Math.round(val).toString(),

@@ -13,7 +13,7 @@ const CustomerDonutChart = ({ series, labels }: any) => {
   const options: ApexOptions = {
     chart: { type: "donut" },
     labels,
-    colors: ["#584abd", "#089442"],
+    colors: ["#584abd", "#064b23"],
     dataLabels: { enabled: false },
     legend: {
       position: "bottom",
@@ -26,6 +26,14 @@ const CustomerDonutChart = ({ series, labels }: any) => {
           size: "70%",
           labels: {
             show: true,
+            name:{
+            fontSize: "11px",
+            fontWeight: 600,
+            },
+            value:{
+            fontSize: "15px",
+            fontWeight: 600,
+            },
             total: {
               show: false,
             },

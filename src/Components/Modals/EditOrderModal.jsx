@@ -10,20 +10,11 @@ export default function EditOrderModal({ order, onClose }) {
   const [pickupSpot, setPickupSpot] = useState(order.pickup?.spot || "");
   const [pickupTime, setPickupTime] = useState(order.pickup?.time || "");
   const [notes, setNotes] = useState(order.pickup?.notes || "");
-
 const handleSave = () => {
   dispatch(
     updateOrderStatus({
       orderId: order._id,
-      updates: {
-        status,
-        pickup: {
-          ...order.pickup,
-          spot: pickupSpot,
-          time: pickupTime,
-          notes,
-        },
-      },
+      status: status
     })
   );
 
@@ -34,7 +25,6 @@ const handleSave = () => {
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
       <div className="bg-white w-full max-w-lg rounded-xl shadow-lg">
-        {/* Header */}
         <div className="flex justify-between items-center px-5 py-4 border-b">
           <h2 className="text-lg font-semibold">Edit Order</h2>
           <button onClick={onClose}>
@@ -42,7 +32,6 @@ const handleSave = () => {
           </button>
         </div>
 
-        {/* Body */}
         <div className="p-5 space-y-4 text-sm">
           <div>
             <label className="block text-gray-500 mb-1">Customer</label>
@@ -60,14 +49,13 @@ const handleSave = () => {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full border px-3 py-2 rounded"
             >
-              <option >Pickup Requested</option>
-              <option >Pickup Scheduled</option>
-              <option >Picked Up</option>
-              <option >Cleaning In Progress</option>
-              <option >Ready for Delivery</option>
-              <option >Delivered</option>
-              <option >Cancelled</option>
-
+              <option value="Pickup Requested">Pickup Requested</option>
+              <option value="Pickup Scheduled">Pickup Scheduled</option>
+              <option value="Picked Up">Picked Up</option>
+              <option value="Cleaning In Progress">Cleaning In Progress</option>
+              <option value="Ready for Delivery">Ready for Delivery</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
 

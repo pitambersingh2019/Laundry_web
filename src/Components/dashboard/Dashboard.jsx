@@ -60,13 +60,11 @@ export default function Dashboard() {
     (sum, o) => sum + o.grandTotal,
     0
   );
-
   const getMonthlyChartSeries = () => {
-    debugger
-    const completedCount = Array(12).fill(0);
+    const profitData = Array(12).fill(0);
     const orderCount = Array(12).fill(0);
     const returnCount = Array(12).fill(0);
-
+    debugger
     if (!Array.isArray(orders)) return [];
 
     orders.forEach((order) => {
@@ -75,14 +73,15 @@ export default function Dashboard() {
       const month = new Date(order.createdAt).getMonth();
 
       orderCount[month] += 1;
-      const serviceCost = order.services.reduce(
-        (sum, s) => sum + (s.totalPrice || 0),
-        0
-      );
 
-      const profit = (order.grandTotal || 0) - serviceCost;
-      if (order.status === "Delivered") {
-       profit
+      const totalCost = order.services.reduce((sum, s) => {
+        return sum + (s.costPrice || 0) * (s.quantity || 1);
+      }, 0);
+      if (totalCost) {
+        const profit = (order.grandTotal || 0) - totalCost;
+        if (order.status === "Delivered") {
+          profitData[month] += profit;
+        }
       }
 
       if (order.status === "Cancelled") {
@@ -91,12 +90,11 @@ export default function Dashboard() {
     });
 
     return [
-      { name: "Net Profit", data: completedCount },
+      { name: "Net Profit", data: profitData },
       { name: "Total Orders", data: orderCount },
       { name: "Cancelled Orders", data: returnCount },
     ];
   };
-
   const chartSeries = getMonthlyChartSeries();
 
   const getCustomerDonutData = (customers) => {
