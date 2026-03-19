@@ -12,14 +12,12 @@ export default function AddDriverModal({ driver, onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (driver) {
       setName(driver.name || "");
       setEmail(driver.email || "");
       setPhone(driver.phone || "");
-      setPassword("");
     }
   }, [driver]);
 
@@ -31,7 +29,6 @@ export default function AddDriverModal({ driver, onClose }) {
           name,
           email,
           phone,
-          password,
         })
       );
     } else {
@@ -40,7 +37,6 @@ export default function AddDriverModal({ driver, onClose }) {
           name,
           email,
           phone,
-          password,
         })
       );
     }
@@ -52,7 +48,6 @@ export default function AddDriverModal({ driver, onClose }) {
     setName("");
     setEmail("");
     setPhone("");
-    setPassword("");
     onClose();
   };
 
@@ -95,7 +90,7 @@ export default function AddDriverModal({ driver, onClose }) {
               </label>
               <input
                 name="driver_email"
-                autoComplete="new-email"
+                autoComplete="off"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={!!driver}
@@ -113,21 +108,6 @@ export default function AddDriverModal({ driver, onClose }) {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full border px-3 py-2 rounded"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-500 mb-1">
-                Password (optional)
-              </label>
-              <input
-                type="password"
-                name="driver_password"
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border px-3 py-2 rounded"
-                placeholder="Leave blank to keep unchanged"
               />
             </div>
           </div>
